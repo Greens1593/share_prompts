@@ -6,15 +6,18 @@ import { useState, useEffect } from "react"
 import { signIn, signOut, useSession, getProviders } from "next-auth/react"
 
 const Nav = () => {
-  const isUserLoggedIn = true
+    const { data: session } = useSession()
+    
     const [providers, setProviders] = useState(null)
     const [toggleDropdovn, setToggleDropdovn] = useState(false)
     useEffect(() => {
-        const setProvsders = async () => {
+        const setUpProviders = async () => {
             const res = await getProviders()
             setProviders(res)
         }
+        setUpProviders()
     }, [])
+
   return (
       <nav className="flex flex-between w-full mb-16 pt-3">
           <Link href='/' className="flex gap-2 flex-center">
@@ -22,7 +25,7 @@ const Nav = () => {
                 <p className="logo_text">Share Prompts</p>
           </Link>
           <div className="sm:flex hidden">
-              {isUserLoggedIn ? (
+              {session?.user ? (
                   <div className="flex gap-3 md:gap-5">
                       <Link href='/create-prompt' className="black_btn">
                           Create Post
@@ -32,7 +35,7 @@ const Nav = () => {
                           className="outline_btn"
                       >Sign Out</button>
                       <Link href='/profile'>
-                          <Image src="/assets/images/logo.svg" width={37} height={37} alt="Profile" className="rounded-full"/>
+                          <Image src={session?.user.image} width={37} height={37} alt="Profile" className="rounded-full"/>
                       </Link>
                   </div>
               ): (
@@ -49,10 +52,10 @@ const Nav = () => {
               )}
           </div>
           <div className="sm:hidden flex relative">
-              {isUserLoggedIn ? (
+              {session?.user ? (
                   <div className="flex">
                       <Image
-                          src="/assets/images/logo.svg"
+                          src={session?.user.image}
                           width={37} height={37}
                           alt="profile" className="rounded-full"
                           onClick={() => {setToggleDropdovn((prev) => !prev)}}
