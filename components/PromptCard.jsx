@@ -1,8 +1,26 @@
-import React from 'react'
+'use client'
 
-const PromptCard = () => {
+import { useState } from 'react'
+import Image from 'next/image'
+import { useSession } from 'next-auth/react'
+import { usePathname, useRouter } from 'next/navigation'
+
+const PromptCard = ({ post, handleTagClick, handleEditm, hendleDelete }) => {
+  console.log(post)
   return (
-    <div>PromptCard</div>
+    <div className='prompt_card'>
+      <div className='flex justify-between items-start gap-5'>
+        <div className='flex-1 flex justify-start items-center gap-3 cursor-pointer'>
+          <Image
+            src={post?.creator?.image}
+            alt='user image'
+            width={40}
+            height={40}
+            className='rounded-full object-contain'
+          />
+        </div>
+      </div>
+    </div>
   )
 }
 
