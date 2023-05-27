@@ -6,7 +6,6 @@ import { useSession } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 
 const PromptCard = ({ post, handleTagClick, handleEditm, hendleDelete }) => {
-  console.log(post)
   return (
     <div className='prompt_card'>
       <div className='flex justify-between items-start gap-5'>

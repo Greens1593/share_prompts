@@ -9,25 +9,30 @@ import Form from "@components/form";
 
 const CreatePrompt = () => {
   const router = useRouter();
-  const { session } = useSession();
-    const [submitting, setSubmitting] = useState(false)
-    const [post, setPost] = useState({
-        prompt: "",
-        tag: "",
-    })
-    const createPrompt = async (e) => {
+  const { data: session } = useSession();
+  const [submitting, setSubmitting] = useState(false)
+  const [post, setPost] = useState({
+      prompt: "",
+      tag: "",
+  })
+
+  const createPrompt = async (e) => {
       e.preventDefault()
       setSubmitting(true)
 
-      try {
-        const res = await fetch("/api/prompt/new", {
-          method: "POST",
-          body: JSON.stringify({
-            prompt: post.prompt,
-            userId: session?.user.id,
-            tag: post.tag,
-          }),
-        });
+    try {
+    if (!session || !session.user || !session.user.id) {
+      throw new Error("User session not found");
+    }
+
+    const res = await fetch("/api/prompt/new", {
+      method: "POST",
+      body: JSON.stringify({
+        prompt: post.prompt,
+        userId: session.user.id,
+        tag: post.tag,
+      }),
+    });
         if (res.ok) {
             router.push("/");
           }
@@ -36,7 +41,8 @@ const CreatePrompt = () => {
       } finally {
         setSubmitting(false);
       }
-    }
+  }
+  
     return (
       <Form
             type="Create"
