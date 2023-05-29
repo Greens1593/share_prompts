@@ -68,6 +68,14 @@
         padding: 0;
     }
 }
+@media screen and (min-width: 640px) and (max-width: 768px) {
+    .copy_btn {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+    }
+}
+    
 
 /* Tailwind Styles */
 

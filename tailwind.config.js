@@ -17,6 +17,9 @@ module.exports = {
       boxShadow: {
         btn: "inset 10px -50px 94px 0 rgb(199, 199, 199, 0.2)",
       },
+      width: {
+        "max-content": "max-content",
+      },
     },
   },
   plugins: [],
