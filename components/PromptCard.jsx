@@ -17,9 +17,17 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
       setCopied(''), 3000
     )
   }
+  const openProfile = () => {
+    if (post.creator._id !== session?.user.id){
+      router.push(`/profile/${post.creator._id}?name=${post.creator.username}`)
+    } else {
+      router.push(`/profile`)
+    }
+  }
   return (
     <div className='prompt_card'>
       <div className='flex justify-between items-start gap-5'>
+        <div onClick={openProfile}>
         <div className='flex-1 flex justify-start items-center gap-3 cursor-pointer'>
           <Image
             src={post?.creator?.image}
@@ -33,8 +41,10 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
               {post?.creator?.username}
             </h3>
             <p className='font-inter md:text-sm sm:text-xs text-gray-500'>{post?.creator?.email}</p>
-          </div>
-          <div className='copy_btn ml-auto' onClick={handleCopy}>
+            </div>
+            </div>
+        </div>
+        <div className='copy_btn ml-auto' onClick={handleCopy}>
             <Image
               src={copied === post.prompt ? '/assets/icons/tick.svg' : '/assets/icons/copy.svg'}
               alt='copy'
@@ -42,7 +52,6 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
               height={12}
             />
           </div>
-        </div>
       </div>
       <p className='my-4 font-satoshi text-sm  text-gray-700'>{post?.prompt}</p>
       <p

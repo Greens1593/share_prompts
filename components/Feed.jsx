@@ -16,9 +16,34 @@ const PromptCardList = ({ data, handleTagClick }) => {
 
 const Feed = () => {
   const [searchText, setSearchText] = useState('')
+  const [searchTimeout, setSearchTimeout] = useState(null)
+  const [searchResults, setSearchResults] = useState([])
   const [posts, setPosts] = useState([])
+
+  const filterPrompts = (searchText) => {
+    const regex = new RegExp(`${searchText}`, 'i')
+    const allPosts = posts
+    return allPosts.filter(
+      (item) =>
+        regex.test(item.creator.username) ||
+        regex.test(item.tag) ||
+        regex.test(item.prompt)
+    )
+  }
   const handleSearchChange = (e) => {
-    
+    clearTimeout(searchTimeout);
+    setSearchText(e.target.value);
+    setSearchTimeout(
+      setTimeout(() => {
+        const searchResult = filterPrompts(e.target.value)
+        setSearchResults(searchResult);
+      }, 500)
+    )
+  }
+  const handleTagClick = (tag) => {
+    setSearchText(tag);
+    const searchResult = filterPrompts(tag)
+    setSearchResults(searchResult);
   }
   useEffect(() => {
     const fetchPosts = async () => {
@@ -40,9 +65,12 @@ const Feed = () => {
           className='search_input peer'
         />
       </form>
+      {searchResults.length === 0 && posts.length === 0 && (
+        <span className='pb-4 head_text blue_gradient text-center'>There are no prompts yet.</span>
+      )}
       <PromptCardList
-        data={posts}
-        handleTagClick={() => {}}
+        data={searchResults.length !== 0 ? searchResults : posts}
+        handleTagClick={handleTagClick}
       />
     </section>
   )
